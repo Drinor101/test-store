@@ -1,12 +1,15 @@
 import { Metadata } from "next"
 
+import HeroBanner from "@components/home/hero-banner"
+import FeaturedCollections from "@components/home/featured-collections"
+import PromotionalBanners from "@components/home/promotional-banners"
 import FeaturedProducts from "@modules/home/components/featured-products"
-import Hero from "@modules/home/components/hero"
 import { listCollections } from "@lib/data/collections"
+import { listCategories } from "@lib/data/categories"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
-  title: "Simple Store - Quality Products for Everyone",
+  title: "Store - Quality Products for Everyone",
   description:
     "Discover quality products with a seamless shopping experience. Simple, clean, and reliable.",
 }
@@ -21,31 +24,26 @@ export default async function Home(props: {
   const region = await getRegion(countryCode)
 
   const { collections } = await listCollections({
-    fields: "id, handle, title",
+    fields: "id, handle, title, metadata",
   })
 
-  if (!collections || !region) {
+  const categories = await listCategories()
+
+  if (!collections || !region || !categories) {
     return null
   }
 
   return (
-    <div className="min-h-screen">
-      <Hero />
+    <div className="min-h-screen bg-white">
+      <HeroBanner collections={collections} />
+      
+      <FeaturedCollections collections={collections} />
+      
+      <PromotionalBanners />
       
       <section className="py-16 bg-white">
-        <div className="content-container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary-900 mb-4">
-              Featured Collections
-            </h2>
-            <p className="text-lg text-primary-600 max-w-2xl mx-auto">
-              Explore our curated selection of products
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeaturedProducts collections={collections} region={region} />
-          </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FeaturedProducts collections={collections} region={region} />
         </div>
       </section>
     </div>

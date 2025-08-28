@@ -180,8 +180,17 @@ module.exports = {
         enter: "enter 200ms ease-out",
         "slide-in": "slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)",
         leave: "leave 150ms ease-in forwards",
+        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      aspectRatio: {
+        '3/2': '3 / 2',
+        '4/3': '4 / 3',
+        '16/9': '16 / 9',
       },
     },
   },
-  plugins: [require("tailwindcss-radix")()],
+  plugins: [
+    require("tailwindcss-radix")(),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }
